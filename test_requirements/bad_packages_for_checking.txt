@@ -1,0 +1,13 @@
+requects
+kafka-python
+requests-py
+python2-websocket
+momnet
+request-py
+coolorful_unstable
+kafka-python3
+kafka-py
+colrful
+google-python-client-api
+fake_useragent
+fake-useragent
