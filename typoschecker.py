@@ -165,15 +165,15 @@ def main():
                 fifth_check = permutation_check(package, popular_packages)
 
                 if first_check:
-                    message = f"The package {package} may be affected by Typosquatting.\n Maybe you mean the package '{first_check}':"
+                    message = f"The package {package} may be affected by Typosquatting.\n Maybe you mean the package '{first_check}'."
                 elif second_check:
-                    message = f"The package {package} may be affected by Typosquatting.\n Maybe you mean the package '{second_check}':"
+                    message = f"The package {package} may be affected by Typosquatting.\n Maybe you mean the package '{second_check}'."
                 elif third_check:
-                    message = f"The package {package} may be affected by Typosquatting.\n Maybe you mean the package '{third_check}':"
+                    message = f"The package {package} may be affected by Typosquatting.\n Maybe you mean the package '{third_check}'."
                 elif fourth_check:
-                    message = f"The package {package} may be affected by Typosquatting.\n Maybe you mean the package '{fourth_check}':"
+                    message = f"The package {package} may be affected by Typosquatting.\n Maybe you mean the package '{fourth_check}'."
                 elif fifth_check:
-                    message = f"The package {package} may be affected by Typosquatting.\n Maybe you mean the package '{fifth_check}':"
+                    message = f"The package {package} may be affected by Typosquatting.\n Maybe you mean the package '{fifth_check}'."
                 print(message)
     except FileNotFoundError as e:
         print(f"Error: {e}")
