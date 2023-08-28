@@ -26,6 +26,9 @@ Follow these steps to get started with Typosquatting Checker:
    python3 typoschecker.py test_requirements/requirements_test.txt 
    ```
    If any potential typosquatting packages are detected, the tool will provide suggestions for possible correct package names.
+   
+   Results:
+   ![example.png](test_requirements%2Fexample.png)
 
 2. Update the PyPi list of popular packages:
 
@@ -38,3 +41,4 @@ Follow these steps to get started with Typosquatting Checker:
     ```
     python3 typoschecker.py --help
     ```
+4. Use case:
