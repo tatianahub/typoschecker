@@ -46,4 +46,3 @@ Follow these steps to get started with Typosquatting Checker:
     ```
     python3 typoschecker.py --help
     ```
-4. Use case:
