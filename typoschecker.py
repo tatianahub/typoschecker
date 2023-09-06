@@ -7,25 +7,37 @@ import requests
 MAX_LEVENSHTEIN_DISTANCE = 2
 
 DICTIONARY_PREFIX = [
-    'python-', 'python_', 'python3-', 'python3_', 'python2-', 'python2_',
-    'py-', 'py_', 'py3-', 'py3_', 'py2-', 'py2_',
-    'pypi-', 'pypi_', 'pip-', 'pip_', 'dev-', 'dev_',
-    'alpha-', 'alpha_', 'beta-', 'beta_',
-    'rc-', 'rc_', 'final-', 'final_',
-    'release-', 'release_', 'stable-', 'stable_',
-    'unstable-', 'unstable_', 'latest-', 'latest_',
-    'legacy-', 'legacy_'
+    'python-', 'python_', 'python.', 'python3-', 'python3_', 'python3.', 'python2-', 'python2_', 'python2.',
+    'py-', 'py_', 'py.', 'py3-', 'py3_', 'py3.', 'py2-', 'py2_', 'py2.',
+    'pypi-', 'pypi_', 'pypi.',
+    'pip-', 'pip_', 'pip.',
+    'dev-', 'dev_', 'dev.',
+    'alpha-', 'alpha_', 'alpha.',
+    'beta-', 'beta_', 'beta.',
+    'rc-', 'rc_', 'rc.',
+    'final-', 'final_', 'final.',
+    'release-', 'release_', 'release.',
+    'stable-', 'stable_', 'stable.',
+    'unstable-', 'unstable_', 'unstable.',
+    'latest-', 'latest_', 'latest.',
+    'legacy-', 'legacy_', 'legacy.'
 ]
 
 DICTIONARY_SUFFIX = [
-    '-python', '_python', '-python3', '_python3', '-python2', '_python2',
-    '-py', '_py', '-py3', '_py3', '-py2', '_py2',
-    '-pypi', '_pypi', '-pip', '_pip', '-dev', '_dev',
-    '-alpha', '_alpha', '-beta', '_beta',
-    '-rc', '_rc', '-final', '_final',
-    '-release', '_release', '-stable', '_stable',
-    '-unstable', '_unstable', '-latest', '_latest',
-    '-legacy', '_legacy'
+    '-python', '_python', '.python', '-python3', '_python3', '.python3', '-python2', '_python2', '.python2',
+    '-py', '_py', '.py', '-py3', '_py3', '.py3', '-py2', '_py2', '.py2',
+    '-pypi', '_pypi', '.pypi',
+    '-pip', '_pip', '.pip',
+    '-dev', '_dev', '.dev',
+    '-alpha', '_alpha', '.alpha',
+    '-beta', '_beta', '.beta',
+    '-rc', '_rc', '.rc',
+    '-final', '_final', '.final',
+    '-release', '_release', '.release',
+    '-stable', '_stable', '.stable',
+    '-unstable', '_unstable', '.unstable',
+    '-latest', '_latest', '.latest',
+    '-legacy', '_legacy', '.legacy'
 ]
 
 DICTIONARY_SUBSTITUTIONS = {
@@ -69,16 +81,27 @@ def substitutions_check(package, popular_packages, dictionary_substitutions):
 
 # Checking for permutation mistake (instead google-api-python-client is google-python-client-api)
 def permutation_check(package, popular_packages):
-    if '-' not in package and '_' not in package:
+    if '-' not in package and '_' not in package and '.' not in package:
         return ''
     else:
-        words = re.split('[-_]', package)
+        words = re.split('[-_.]', package)
         num_words = len(words)
         def generate(idx):
             if idx == num_words:
-                permuted_word = '-'.join(words)
-                if package != permuted_word: # checking only after permutation
-                    result = check_in_popular_packages(permuted_word, popular_packages)
+                permuted_word_1 = '-'.join(words)
+                permuted_word_3 = '_'.join(words)
+                permuted_word_2 = '.'.join(words)
+
+                if package != permuted_word_1: # checking only after permutation
+                    result = check_in_popular_packages(permuted_word_1, popular_packages)
+                    if result:
+                        return result
+                if package != permuted_word_2:  # checking only after permutation
+                    result = check_in_popular_packages(permuted_word_2, popular_packages)
+                    if result:
+                        return result
+                if package != permuted_word_3:  # checking only after permutation
+                    result = check_in_popular_packages(permuted_word_3, popular_packages)
                     if result:
                         return result
                 return ''
@@ -110,10 +133,10 @@ def check_in_popular_packages(package, popular_packages):
 
 # Package processing, e.g. "psutil==5.6.7" or "psutil<=5.6.7" to "psutil"
 def preprocess_package(package):
-    package = re.sub(r'[<=>!@].*', '', package)
+    package = re.sub(r'[<=>!@~`].*', '', package)
     if package.startswith('#'):
         package = package[1:]
-    return package.lower()
+    return package.lower() #case insensitive in PyPi
 def load_packages(file_path):
     try:
         with open(file_path) as file:
@@ -166,15 +189,19 @@ def main():
 
                 if first_check:
                     message = f"The package {package} may be affected by Typosquatting.\n Maybe you mean the package '{first_check}'."
+                    print(message)
                 elif second_check:
                     message = f"The package {package} may be affected by Typosquatting.\n Maybe you mean the package '{second_check}'."
+                    print(message)
                 elif third_check:
                     message = f"The package {package} may be affected by Typosquatting.\n Maybe you mean the package '{third_check}'."
+                    print(message)
                 elif fourth_check:
                     message = f"The package {package} may be affected by Typosquatting.\n Maybe you mean the package '{fourth_check}'."
+                    print(message)
                 elif fifth_check:
                     message = f"The package {package} may be affected by Typosquatting.\n Maybe you mean the package '{fifth_check}'."
-                print(message)
+                    print(message)
     except FileNotFoundError as e:
         print(f"Error: {e}")
 
